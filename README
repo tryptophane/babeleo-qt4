@@ -1,0 +1,26 @@
+Simple plasmoid for fast translation of a word at http://www.leo.org (and others...). 
+Click on the icon to search for the content of the clipboard at leo.org
+or many other sites using your standard browser. 
+Change the translation-language by right-clicking on the icon.
+
+Requirements:
+KDE4 >= 4.2
+
+Features:
+- translating the clipboard contents directly after clicking on the icon or activating keyboard shortcut;
+- entering of the query in a text-field instead of using the clipboard;
+- many other search engines integrated (pons.de, wikipedia, google, open dictionary, etc...);
+- easy configuring of new search engines
+- automatic download of icons for the search engines
+- optimized to save clicks!
+
+Availble languages for translation at leo.org:
+english - german
+french - german
+spanish - german
+italian - german
+chinese - german
+
+Credits:
+The fish I use for the icon comes from the Crystal Clear icon set by Everaldo Coelho (License: LGPL)
+File: Crystal_Clear_app_babelfish_vector.svg

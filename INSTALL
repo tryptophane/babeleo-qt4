@@ -1,0 +1,19 @@
+You will need the utility cmake and some development packages. To install them:
+
+Ubuntu: sudo apt-get install cmake kdebase-workspace-dev kdelibs5-dev
+SUSE: sudo zypper install cmake libkde4-devel kdebase4-workspace-devel
+
+To install the plasmoid, unpack the archive, go to it's main directory and execute this commands:
+
+mkdir build
+cd build
+cmake ../ -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix`
+make
+sudo make install
+kbuildsycoca4
+
+After that, the plasmoid should show up in the add widgets dialog.
+
+If not, you can try to execute:
+
+killall plasma-desktop && plasma-desktop

@@ -1,0 +1,23 @@
+[Desktop Entry]
+Name=Babeleo Translator
+Name[de]=Babeleo Übersetzer
+Name[fr]=Babeleo (traducteur)
+
+Comment=translate clipboard content
+Comment[de]=Übersetzen des Inhalts der Zwischenablage
+comment[fr]=Traduction du contenu du presse-papiers
+
+Icon=babelfishleo-en
+Type=Service
+ServiceTypes=Plasma/Applet
+
+X-KDE-Library=plasma_applet_babeleo
+X-KDE-PluginInfo-Author=Pascal Pollet
+X-KDE-PluginInfo-Email=paspol@gmx.de
+X-KDE-PluginInfo-Name=babeleo
+X-KDE-PluginInfo-Version=0.5.1
+X-KDE-PluginInfo-Website=http://www.kde-look.org
+X-KDE-PluginInfo-Category=Language
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true
