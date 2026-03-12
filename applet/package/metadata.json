@@ -1,0 +1,27 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "paspol@gmx.de",
+                "Name": "Pascal Pollet"
+            }
+        ],
+        "Category": "Language",
+        "Description": "Translate clipboard content at leo.org and other dictionaries",
+        "Description[de]": "Inhalt der Zwischenablage bei leo.org und anderen Wörterbüchern übersetzen",
+        "Description[fr]": "Traduction du contenu du presse-papiers",
+        "EnabledByDefault": true,
+        "Icon": "babelfishleo-en",
+        "Id": "org.kde.plasma.babeleo",
+        "License": "GPL-2.0-or-later",
+        "Name": "Babeleo Translator",
+        "Name[de]": "Babeleo Übersetzer",
+        "Name[fr]": "Babeleo (traducteur)",
+        "Version": "0.6.0",
+        "Website": "https://github.com/tryptophane/babeleo-plasma"
+    },
+    "X-Plasma-API": "declarativeappletscript",
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-MainScript": "ui/main.qml"
+}

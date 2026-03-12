@@ -6,76 +6,29 @@
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation; either version 2
 * of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*
 ***********************************************************************************/
 
 #include "babelengine.h"
 
-Babelengine::Babelengine(QString name, QString url, QString icon, QString position, bool hidden) 
+Babelengine::Babelengine(const QString &name, const QString &url, const QString &icon,
+                         const QString &position, bool hidden)
+    : m_name(name)
+    , m_url(url)
+    , m_icon(icon)
+    , m_position(position)
+    , m_hidden(hidden)
 {
-    m_name = name;
-    m_url = url;
-    m_icon = icon;
-    m_position = position;
-    m_hidden = hidden;
+    // Initialization via member initializer list (more efficient than assignment in the body)
 }
 
-void Babelengine::setName(QString name)
-{
-    m_name = name;
-}
+void Babelengine::setName(const QString &name)     { m_name = name; }
+void Babelengine::setURL(const QString &url)       { m_url = url; }
+void Babelengine::setIcon(const QString &icon)     { m_icon = icon; }
+void Babelengine::setPosition(const QString &pos)  { m_position = pos; }
+void Babelengine::setHidden(bool hidden)           { m_hidden = hidden; }
 
-void Babelengine::setURL(QString url)
-{
-    m_url = url;
-}
-
-void Babelengine::setIcon(QString icon)
-{
-    m_icon = icon;
-}
-
-void Babelengine::setPosition(QString position)
-{
-    m_position = position;
-}
-
-void Babelengine::setHidden(bool hidden)
-{
-    m_hidden = hidden;
-}
-
-QString Babelengine::getName()
-{
-    return m_name;
-}
-
-QString Babelengine::getURL()
-{
-    return m_url;
-}
-
-QString Babelengine::getIcon()
-{
-    return m_icon;
-}
-
-QString Babelengine::getPosition()
-{
-    return m_position;
-}
-
-bool Babelengine::isHidden()
-{
-    return m_hidden;
-}
-
+QString Babelengine::getName() const     { return m_name; }
+QString Babelengine::getURL() const      { return m_url; }
+QString Babelengine::getIcon() const     { return m_icon; }
+QString Babelengine::getPosition() const { return m_position; }
+bool    Babelengine::isHidden() const    { return m_hidden; }

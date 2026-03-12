@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  KConfig XT Schema: Definiert die Konfigurationsschlüssel des Plasmoids.
+  Diese Werte sind in QML als plasmoid.configuration.KEY zugänglich.
+  In C++ werden sie über KConfigGroup config = this->config() gelesen.
+-->
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+                          http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+    <kcfgfile name=""/>
+    <group name="General">
+        <!-- Der Name der aktuell ausgewählten Suchmaschine -->
+        <entry name="currentEngine" type="String">
+            <default>Leo En - De</default>
+        </entry>
+        <!--
+          Die Suchmaschinen-Liste als flache StringList.
+          Je 5 Einträge bilden eine Suchmaschine:
+          [0] Name, [1] URL (mit %s als Platzhalter), [2] Icon-Name,
+          [3] Position ("0"=Hauptmenü, "1"=Untermenü), [4] Hidden ("0"=sichtbar, "1"=versteckt)
+        -->
+        <entry name="engines" type="StringList">
+            <default></default>
+        </entry>
+    </group>
+</kcfg>

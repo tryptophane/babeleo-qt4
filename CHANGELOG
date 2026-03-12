@@ -1,61 +1,51 @@
+0.6.0 (2025)
+- Full port to KDE Plasma 6 / Qt 6 / KDE Frameworks 6
+- QML-based UI replacing Qt Widgets (compactRepresentation + fullRepresentation)
+- Settings dialog integrated into standard Plasma settings (Search Engines, Shortcuts, About)
+- Wayland support: primary selection via wl-clipboard, browser activation via xdg-activation-v1
+- Clipboard reading via wl-paste (Wayland primary selection) with Klipper D-Bus fallback
+- Favicon download via KIO::FavIconRequestJob (handles all formats including SVG)
+- URL opening via KIO::OpenUrlJob with xdg-activation token for proper foreground focus
+- Global shortcut registration via KGlobalAccel
+- Config pages in standard Plasma settings dialog (no separate window)
+- Search engine list fully configurable from settings; built-in engines are examples only
+
 0.5.2 (10.10.2009)
 - new AUTHORS file, updated README file
 
 0.5.1 (30.09.2009)
 - global shortcut for triggering a query works again
-- added another possibility for a global shortcut to open the manual
-query dialog
+- added another possibility for a global shortcut to open the manual query dialog
 - added some more search engines to the default list
 
 0.5 (10.09.2009)
-- automatic download of icons for the search engines. Babeleo fetches the
-favicons from the web pages of the search engines.
-
+- automatic download of icons for the search engines
 
 0.4.2 (31.08.2009)
 - fixed bug which caused plasma to crash
 
 0.4.1 (31.08.2009)
-- alphabetical sorting of search engines in the menus.
-- added a few more search engines to the default list.
-- some of the search engines are now hidden by default.
-- source code cosmetics.
+- alphabetical sorting of search engines in the menus
+- added a few more search engines to the default list
+- some of the search engines are now hidden by default
 
 0.4 (30.08.2009)
-- added a cool new configuration interface fo search engines:
-- possibility to add, remove and edit search engines.
-- possibility to hide some of the configured search engines.
-- possibility to define for each search engine if it should appear in
-the main context menu or in the "other engines" menu.
-- changed plasmoid name as displayed in the "add widgets..." dialog to
-"Babeleo translator" for easier finding after installation.
+- new configuration interface for search engines
+- possibility to add, remove and edit search engines
+- possibility to hide some of the configured search engines
+- position (main menu / submenu) configurable per engine
 
 0.3.2 (25.08.2009)
-- Babeleo now doesn't use the global clipboard content anymore, but the
-currently highlighted text. There is no need to type Ctrl+C anymore, 
-regardless of the klipper-settings.
+- uses highlighted text (primary selection) instead of clipboard — no Ctrl+C needed
 
 0.3.1 (24.08.2009)
-- removed bug which could cause plasma to crash directly after a fresh 
-install or an update from an older version of Babeleo.
+- fixed crash after fresh install or update
 
 0.3 (22.08.2009)
-- code restructured to easily add more search engines.
-- added a few engines to show what's possible. I will add a configuration
-window to manage the engines in a later version. For now, new engines can
-be added easily by those who want by editing the sources (babeleo.cpp, 
-after line 137)
-- Tooltip shows the current engine
+- support for multiple search engines
 
-0.2.1 (20.08.2009):
-- improved the behaviour of the text field for manual entry of the query
-when it gets opened and when it loses focus. 
-- cleaned up the code.
+0.2 (20.08.2009)
+- manual query text field added
 
-0.2 (20.08.2009):
-- added the possibility to enter a query manually in a small textfield, 
-instead of taking it from the clipboard.
- 
-0.1 (18.08.2009):
-- initial release.
-
+0.1 (18.08.2009)
+- initial release

@@ -1,104 +1,147 @@
 /***********************************************************************************
 * Babeleo: Plasmoid for translating clipboard content at leo.org.
 * Copyright (C) 2009 Pascal Pollet <pascal@bongosoft.de>
-* 
+*
+* Plasma 6 / KDE Frameworks 6 port.
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation; either version 2
 * of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*
 ***********************************************************************************/
 
-#ifndef BABELEO_HEADER
-#define BABELEO_HEADER
+#pragma once
 
 #include "babelengine.h"
-#include "ui_babeleoSettings.h"
-#include "ui_babeleoOtherSettings.h"
 
-#include <Plasma/Applet>
-#include <Plasma/IconWidget>
-#include <Plasma/Dialog>
+#include <Plasma/Applet>             // Base class for all Plasma applets
+#include <KConfigGroup>              // KDE configuration system
 
-#include <kiconloader.h>
-
-#include <plasma/containment.h>
-
-#include <QActionGroup>
 #include <QAction>
-#include <QLineEdit>
-#include <QMenu>
-#include <QToolButton>
-#include <QListWidgetItem>
+#include <QActionGroup>
+#include <QHash>
+#include <QStringList>
+#include <QVariantList>
 
-#include <KAction>
-
+/**
+ * Babeleo - Plasma 6 applet for quick dictionary lookups.
+ *
+ * Architecture in Plasma 6:
+ * - This C++ class: BUSINESS LOGIC (managing search engines, opening URLs, config)
+ * - main.qml:       UI (icon in the panel, popup dialog)
+ *
+ * Communication C++ → QML:
+ * - Q_PROPERTY: QML reads values via "Plasmoid.propertyName"
+ * - Q_SIGNAL:   QML receives events via "Connections { target: Plasmoid }"
+ *
+ * Communication QML → C++:
+ * - Q_INVOKABLE: QML calls methods via "Plasmoid.methodName()"
+ */
 class Babeleo : public Plasma::Applet
 {
     Q_OBJECT
 
-    public:
-        Babeleo(QObject *parent, const QVariantList &args);
-        ~Babeleo();
+    // Q_PROPERTY makes C++ members accessible to QML.
+    // READ: getter method; NOTIFY: signal on change (important for QML bindings!)
+    Q_PROPERTY(QString currentEngine READ currentEngine NOTIFY currentEngineChanged)
 
-        void init();
-        void createMenu();
-        virtual QList<QAction*> contextualActions();
-        void populateEngines();
-        int checkEngineChanges(QListWidgetItem *item, bool);
-        int saveChanges(QListWidgetItem *item);
+    /** Exposes this applet instance to QML config pages via Plasmoid.self.
+     *  QML uses dynamic dispatch on the returned QObject*, giving access
+     *  to all Q_INVOKABLE methods of Babeleo (not just Plasma::Applet).
+     *  Used in configSearchEngines.qml: Plasmoid.self.engineList() etc.
+     */
+    Q_PROPERTY(QObject *self READ self CONSTANT)
 
-    public slots:
-        void browseEngine();
-        void toggleDialog();
-        void closeDialog();
-        void dialogResized();
-        void setEngine();
-        void startManualQuery();
-        void settingsItemChanged(QListWidgetItem *, QListWidgetItem *);
-        void addEngine();
-        void deleteEngine(); 
-        void saveEngines();
-        void okClicked();
-        void applyClicked();
-        void rejectClicked();
-        void fetchIcon();
+public:
+    // Plasma 6 constructor signature: KPluginMetaData instead of QVariantList as second parameter
+    Babeleo(QObject *parent, const KPluginMetaData &data, const QVariantList &args);
+    ~Babeleo() override;
 
-    private:
-        Plasma::IconWidget *m_icon;
-        QString m_language;
-        QActionGroup *m_langChoices;
-        QAction *m_manualQuery;
-        QList<QAction*> *m_actions;
-        Plasma::Dialog *m_dialog;
-        QLineEdit *m_lineEdit;
-        QToolButton *m_queryButton;
-        QToolButton *m_closeButton;
-        QHash<QString,Babelengine *> *m_enginesHash;
-        QString m_engine;
-        Ui::settingsDialog m_uiSettings;
-        Ui::babeleoOtherSettings m_uiOtherSettings;
-        QStringList m_engines;
-        int m_count;
-        KConfigGroup m_configuration;
-        KAction *m_newAct;
+    // init() is called by Plasma once the applet has been initialized.
+    // Comparable to a Spring @PostConstruct or Angular ngOnInit.
+    void init() override;
 
-    protected:
-        void createConfigurationInterface(KConfigDialog *parent);
+    // configChanged() is called by Plasma when config changes externally.
+    void configChanged() override;
 
-    signals:
+    // contextualActions() returns the entries for the right-click context menu.
+    QList<QAction *> contextualActions() override;
 
+    // Getter for the Q_PROPERTY currentEngine
+    QString currentEngine() const;
 
+    // Getter for the Q_PROPERTY self - returns this instance as QObject* for QML dynamic dispatch
+    QObject *self() { return this; }
+
+    // Q_INVOKABLE: These methods can be called directly from QML
+    // via "Plasmoid.methodName()" or "Plasmoid.self.methodName()"
+
+    /**
+     * Reads the PRIMARY clipboard (X11 mouse selection, whatever was highlighted)
+     * and opens the current search engine with it in the browser.
+     */
+    Q_INVOKABLE void browseWithClipboard();
+
+    /**
+     * Opens the current search engine with the given text.
+     * Called from the manual search dialog (popup).
+     */
+    Q_INVOKABLE void browseWithText(const QString &text);
+
+    /**
+     * Downloads the favicon of a website and saves it locally.
+     * Asynchronous via KIO - does not block the UI!
+     * Emits iconFetched() when done.
+     */
+    Q_INVOKABLE void fetchIcon(const QString &engineName, const QString &pageUrl);
+
+    /**
+     * Returns the list of search engines as a QVariantList for QML.
+     * Each entry: {name, url, icon, position, hidden}
+     */
+    Q_INVOKABLE QVariantList engineList() const;
+
+    /** Saves a search engine (create new or update existing). */
+    Q_INVOKABLE void saveEngine(const QString &oldName, const QString &newName,
+                                const QString &url, const QString &icon,
+                                const QString &position, bool hidden);
+
+    /** Deletes a search engine. */
+    Q_INVOKABLE void deleteEngine(const QString &name);
+
+    /** Saves all engines to config and rebuilds the context menu. Called from QML config pages. */
+    Q_INVOKABLE void rebuildAfterConfigChange();
+
+Q_SIGNALS:
+    void currentEngineChanged();
+
+    /**
+     * Signal: QML should open/close the popup dialog.
+     * Triggered by "Manual query..." in the context menu.
+     * Received in QML via: Connections { target: Plasmoid; function onRequestTogglePopup() {} }
+     */
+    void requestTogglePopup();
+
+    /** Feedback after fetchIcon() - provides the file path of the icon, empty on error. */
+    void iconFetched(const QString &engineName, const QString &iconPath);
+
+    /** After saveEngine/deleteEngine: the config UI should refresh itself. */
+    void enginesChanged();
+
+private Q_SLOTS:
+    void setEngineFromAction();   // connected to QAction::triggered() from the context menu
+
+private:
+    void createMenu();
+    void openUrl(const QString &engineName, const QString &query);
+    void populateEngines();
+    void saveEnginesToConfig();
+
+    QString m_currentEngine;
+    QActionGroup *m_langChoices = nullptr;
+    QList<QAction *> m_actions;
+    QHash<QString, Babelengine *> m_enginesHash;
+    QStringList m_enginesList;
+    KConfigGroup m_configuration;
+    QAction *m_browseAction = nullptr;  // global shortcut action registered with KGlobalAccel
 };
-
-K_EXPORT_PLASMA_APPLET(babeleo, Babeleo)
-#endif

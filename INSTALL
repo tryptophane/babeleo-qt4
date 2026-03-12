@@ -1,19 +1,12 @@
-You will need the utility cmake and some development packages. To install them:
+See README.md for full build instructions and dependency lists.
 
-Ubuntu: sudo apt-get install cmake kdebase-workspace-dev kdelibs5-dev
-SUSE: sudo zypper install cmake libkde4-devel kdebase4-workspace-devel
+Quick install:
 
-To install the plasmoid, unpack the archive, go to it's main directory and execute this commands:
+    git clone https://github.com/tryptophane/babeleo-plasma.git
+    cd babeleo-plasma
+    mkdir build && cd build
+    cmake .. -DCMAKE_INSTALL_PREFIX=/usr
+    cmake --build .
+    sudo cmake --install .
 
-mkdir build
-cd build
-cmake ../ -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix`
-make
-sudo make install
-kbuildsycoca4
-
-After that, the plasmoid should show up in the add widgets dialog.
-
-If not, you can try to execute:
-
-killall plasma-desktop && plasma-desktop
+After installation, restart plasmashell or log out and back in.
