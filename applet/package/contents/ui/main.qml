@@ -90,7 +90,7 @@ PlasmoidItem {
     fullRepresentation: PlasmaExtras.Representation {
         id: fullRep
 
-        Layout.minimumWidth: Kirigami.Units.gridUnit * 16
+        Layout.minimumWidth: Kirigami.Units.gridUnit * 20
         // Constrain popup height to exactly fit the content.
         // Without this, PlasmaExtras.Representation grows to a large default size.
         // contentLayout.implicitHeight gives us the exact height of TextField + buttons.

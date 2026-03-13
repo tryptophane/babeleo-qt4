@@ -199,7 +199,9 @@ Item {
 
         // Left panel: engine list + Add/Delete buttons
         ColumnLayout {
-            Layout.preferredWidth: Kirigami.Units.gridUnit * 7
+            Layout.preferredWidth: Kirigami.Units.gridUnit * 10
+            Layout.minimumWidth: Kirigami.Units.gridUnit * 10
+            Layout.maximumWidth: Kirigami.Units.gridUnit * 10
             Layout.fillHeight: true
             spacing: Kirigami.Units.smallSpacing
 
@@ -381,7 +383,8 @@ Item {
                     }
                     PC3.RadioButton {
                         id: otherRadio
-                        text: i18n("Other engines submenu")
+                        Layout.leftMargin: Kirigami.Units.largeSpacing * 2
+                        text: i18n("More search engines submenu")
                         onCheckedChanged: if (!loading && checked) {
                             localChanges = true; root.configurationChanged()
                         }

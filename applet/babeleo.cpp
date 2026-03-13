@@ -129,7 +129,7 @@ void Babeleo::createMenu()
 
     std::sort(sortedNames.begin(), sortedNames.end());
 
-    QMenu *otherMenu = new QMenu(i18n("Other search engines"));
+    QMenu *otherMenu = new QMenu(i18n("More search engines"));
 
     for (const QString &name : std::as_const(sortedNames)) {
         Babelengine *eng = m_enginesHash.value(name);
@@ -157,7 +157,7 @@ void Babeleo::createMenu()
     }
 
     if (!otherMenu->isEmpty()) {
-        QAction *otherAction = new QAction(i18n("Other search engines"), this);
+        QAction *otherAction = new QAction(i18n("More search engines"), this);
         otherAction->setMenu(otherMenu);
         m_actions.append(otherAction);
     } else {
