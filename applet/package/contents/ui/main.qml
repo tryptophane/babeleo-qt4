@@ -79,7 +79,7 @@ PlasmoidItem {
         // Tooltip shows the current search engine.
         // PlasmaComponents3.ToolTip is displayed when hovering over the icon.
         PlasmaComponents3.ToolTip {
-            text: i18n("Translate clipboard content\nCurrent engine: %1", root.plasmoid.currentEngine)
+            text: i18nd("plasma_applet_babeleo","Translate clipboard content\nCurrent engine: %1", root.plasmoid.currentEngine)
         }
     }
 
@@ -124,7 +124,7 @@ PlasmoidItem {
             PlasmaComponents3.TextField {
                 id: queryField
                 Layout.fillWidth: true
-                placeholderText: i18n("Enter search term…")
+                placeholderText: i18nd("plasma_applet_babeleo","Enter search term…")
                 // Automatically focus when the popup opens
                 focus: true
 
@@ -143,13 +143,13 @@ PlasmoidItem {
 
                 PlasmaComponents3.Button {
                     icon.name: "dialog-cancel"
-                    text: i18n("Cancel")
+                    text: i18nd("plasma_applet_babeleo","Cancel")
                     onClicked: root.expanded = false
                 }
 
                 PlasmaComponents3.Button {
                     icon.name: "edit-find"
-                    text: i18n("Search")
+                    text: i18nd("plasma_applet_babeleo","Search")
                     onClicked: startSearch()
                 }
             }

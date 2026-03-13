@@ -13,13 +13,14 @@
         "Description[fr]": "Traduction du contenu du presse-papiers",
         "EnabledByDefault": true,
         "Icon": "babelfishleo-en",
-        "License": "GPL-3.0-or-later",
+        "License": "GPL-2.0-or-later",
         "Name": "Babeleo Translator",
         "Name[de]": "Babeleo Übersetzer",
         "Name[fr]": "Babeleo (traducteur)",
         "Version": "0.6.0",
         "Website": "https://github.com/tryptophane/babeleo-plasma"
     },
+    "X-KDE-TranslationDomain": "plasma_applet_babeleo",
     "X-Plasma-API": "declarativeappletscript",
     "X-Plasma-API-Minimum-Version": "6.0",
     "X-Plasma-MainScript": "ui/main.qml"

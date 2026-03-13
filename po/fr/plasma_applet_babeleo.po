@@ -1,0 +1,108 @@
+# French translations for Babeleo Plasma applet.
+# Copyright (C) 2024 Pascal Pollet
+# This file is distributed under the same license as the babeleo package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: babeleo 0.6.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2024-01-01 00:00+0100\n"
+"Last-Translator: Pascal Pollet <paspol@gmx.de>\n"
+"Language-Team: French\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: applet/babeleo.cpp
+msgid "Translate clipboard content"
+msgstr "Traduire le contenu du presse-papiers"
+
+#: applet/babeleo.cpp
+msgid "More search engines"
+msgstr "Autres moteurs de recherche"
+
+#: applet/babeleo.cpp
+msgid "Manual query..."
+msgstr "Recherche manuelle..."
+
+#: applet/babeleo.cpp
+msgid "A search engine with this name already exists."
+msgstr "Un moteur de recherche portant ce nom existe déjà."
+
+#: applet/package/contents/ui/main.qml
+msgid "Translate clipboard content\nCurrent engine: %1"
+msgstr "Traduire le contenu du presse-papiers\nMoteur actuel : %1"
+
+#: applet/package/contents/ui/main.qml
+msgid "Enter search term…"
+msgstr "Entrer un terme de recherche…"
+
+#: applet/package/contents/ui/main.qml
+msgid "Cancel"
+msgstr "Annuler"
+
+#: applet/package/contents/ui/main.qml
+msgid "Search"
+msgstr "Rechercher"
+
+#: applet/package/contents/config/config.qml
+msgid "Search Engines"
+msgstr "Moteurs de recherche"
+
+#: applet/package/contents/ui/configSearchEngines.qml
+msgid "Fetch Icon"
+msgstr "Récupérer l'icône"
+
+#: applet/package/contents/ui/configSearchEngines.qml
+msgid "Downloading…"
+msgstr "Téléchargement…"
+
+#: applet/package/contents/ui/configSearchEngines.qml
+msgid "Add"
+msgstr "Ajouter"
+
+#: applet/package/contents/ui/configSearchEngines.qml
+msgid "New Engine"
+msgstr "Nouveau moteur"
+
+#: applet/package/contents/ui/configSearchEngines.qml
+msgid "Delete"
+msgstr "Supprimer"
+
+#: applet/package/contents/ui/configSearchEngines.qml
+msgid "Name:"
+msgstr "Nom :"
+
+#: applet/package/contents/ui/configSearchEngines.qml
+msgid "URL (%s = search term):"
+msgstr "URL (%s = terme de recherche) :"
+
+#: applet/package/contents/ui/configSearchEngines.qml
+msgid "Icon:"
+msgstr "Icône :"
+
+#: applet/package/contents/ui/configSearchEngines.qml
+msgid "Theme name or file path"
+msgstr "Nom de thème ou chemin de fichier"
+
+#: applet/package/contents/ui/configSearchEngines.qml
+msgid "Visibility:"
+msgstr "Visibilité :"
+
+#: applet/package/contents/ui/configSearchEngines.qml
+msgid "Hide this search engine"
+msgstr "Masquer ce moteur de recherche"
+
+#: applet/package/contents/ui/configSearchEngines.qml
+msgid "Position:"
+msgstr "Position :"
+
+#: applet/package/contents/ui/configSearchEngines.qml
+msgid "Main menu"
+msgstr "Menu principal"
+
+#: applet/package/contents/ui/configSearchEngines.qml
+msgid "More search engines submenu"
+msgstr "Sous-menu « Autres moteurs de recherche »"

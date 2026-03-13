@@ -18,6 +18,9 @@
 #include <QClipboard>
 #include <QDBusInterface>
 #include <QDBusReply>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
 #include <QMenu>
 #include <QProcess>
 #include <QStandardPaths>
@@ -49,6 +52,7 @@ static QIcon iconFromValue(const QString &iconValue)
 Babeleo::Babeleo(QObject *parent, const KPluginMetaData &data, const QVariantList &args)
     : Plasma::Applet(parent, data, args)
 {
+    KLocalizedString::setApplicationDomain("plasma_applet_babeleo");
 }
 
 Babeleo::~Babeleo()
@@ -332,8 +336,17 @@ void Babeleo::fetchIcon(const QString &engineName, const QString &pageUrl)
             Q_EMIT iconFetched(engineName, QString());
             return;
         }
-        qDebug() << "[Babeleo] fetchIcon: Icon cached as" << job->iconFile();
-        Q_EMIT iconFetched(engineName, job->iconFile());
+        // Copy the favicon from the volatile KIO cache to a persistent location
+        // so it survives cache cleanups.
+        const QString iconDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
+                                + QStringLiteral("/plasma/plasmoids/org.kde.plasma.babeleo/icons/");
+        QDir().mkpath(iconDir);
+        const QString srcPath  = job->iconFile();
+        const QString destPath = iconDir + QFileInfo(srcPath).fileName();
+        if (!QFile::exists(destPath))
+            QFile::copy(srcPath, destPath);
+        qDebug() << "[Babeleo] fetchIcon: Icon stored as" << destPath;
+        Q_EMIT iconFetched(engineName, destPath);
     });
 }
 

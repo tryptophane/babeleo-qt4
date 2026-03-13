@@ -12,7 +12,7 @@ import org.kde.plasma.configuration
 
 ConfigModel {
     ConfigCategory {
-        name: i18n("Search Engines")
+        name: i18nd("plasma_applet_babeleo", "Search Engines")
         icon: "internet-services"
         source: "configSearchEngines.qml"
     }

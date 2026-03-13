@@ -58,6 +58,7 @@ add_feature_info("wl-clipboard (optional)" WL_PASTE_EXECUTABLE
     "Enables Wayland primary selection (mouse-selected text without Ctrl+C)")
 
 add_subdirectory(applet)
+ki18n_install(po)
 
 # Shows a summary of all found/missing packages
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

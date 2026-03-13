@@ -169,7 +169,7 @@ Item {
         target: Plasmoid.self
         function onIconFetched(engineName, iconPath) {
             fetchButton.enabled = true
-            fetchButton.text = i18n("Fetch Icon")
+            fetchButton.text = i18nd("plasma_applet_babeleo","Fetch Icon")
             if (!iconPath) return
 
             // Update the local model entry
@@ -199,9 +199,9 @@ Item {
 
         // Left panel: engine list + Add/Delete buttons
         ColumnLayout {
-            Layout.preferredWidth: Kirigami.Units.gridUnit * 10
-            Layout.minimumWidth: Kirigami.Units.gridUnit * 10
-            Layout.maximumWidth: Kirigami.Units.gridUnit * 10
+            Layout.preferredWidth: Kirigami.Units.gridUnit * 12
+            Layout.minimumWidth: Kirigami.Units.gridUnit * 12
+            Layout.maximumWidth: Kirigami.Units.gridUnit * 12
             Layout.fillHeight: true
             spacing: Kirigami.Units.smallSpacing
 
@@ -260,12 +260,12 @@ Item {
 
                 PC3.Button {
                     icon.name: "list-add"
-                    text: i18n("Add")
+                    text: i18nd("plasma_applet_babeleo","Add")
                     Layout.fillWidth: true
                     onClicked: {
                         commitCurrentToModel()
                         // Add a new entry to the local model only (no C++ call)
-                        const newName = i18n("New Engine")
+                        const newName = i18nd("plasma_applet_babeleo","New Engine")
                         engineModel.append({
                             name: newName, url: "https://",
                             icon: "babelfishleo", position: "1", hidden: false
@@ -280,7 +280,7 @@ Item {
 
                 PC3.Button {
                     icon.name: "list-remove"
-                    text: i18n("Delete")
+                    text: i18nd("plasma_applet_babeleo","Delete")
                     Layout.fillWidth: true
                     enabled: currentIndex >= 0 && engineModel.count > 0
                     onClicked: {
@@ -322,7 +322,7 @@ Item {
                 Layout.topMargin: Kirigami.Units.smallSpacing
                 spacing: Kirigami.Units.smallSpacing
 
-                PC3.Label { text: i18n("Name:") }
+                PC3.Label { text: i18nd("plasma_applet_babeleo","Name:") }
                 PC3.TextField {
                     id: nameField
                     Layout.fillWidth: true
@@ -331,7 +331,7 @@ Item {
 
                 Item { Layout.fillWidth: true; implicitHeight: Kirigami.Units.largeSpacing * 2}
 
-                PC3.Label { text: i18n("URL (%s = search term):") }
+                PC3.Label { text: i18nd("plasma_applet_babeleo","URL (%s = search term):") }
                 PC3.TextField {
                     id: urlField
                     Layout.fillWidth: true
@@ -340,22 +340,23 @@ Item {
 
                 Item { Layout.fillWidth: true; implicitHeight: Kirigami.Units.largeSpacing * 2 }
 
-                PC3.Label { text: i18n("Icon:") }
+                PC3.Label { text: i18nd("plasma_applet_babeleo","Icon:") }
                 RowLayout {
                     Layout.fillWidth: true
                     PC3.TextField {
                         id: iconField
                         Layout.fillWidth: true
-                        placeholderText: i18n("Theme name or file path")
+                        placeholderText: i18nd("plasma_applet_babeleo","Theme name or file path")
                         onTextChanged: if (!loading) { localChanges = true; root.configurationChanged() }
                     }
                     PC3.Button {
                         id: fetchButton
-                        text: i18n("Fetch Icon")
+                        text: i18nd("plasma_applet_babeleo","Fetch Icon")
                         icon.name: "download"
                         onClicked: {
+                            commitCurrentToModel()
                             fetchButton.enabled = false
-                            fetchButton.text = i18n("Downloading\u2026")
+                            fetchButton.text = i18nd("plasma_applet_babeleo","Downloading\u2026")
                             Plasmoid.self.fetchIcon(nameField.text, urlField.text)
                         }
                     }
@@ -363,20 +364,20 @@ Item {
 
                 Item { Layout.fillWidth: true; implicitHeight: Kirigami.Units.largeSpacing * 2 }
 
-                PC3.Label { text: i18n("Visibility:") }
+                PC3.Label { text: i18nd("plasma_applet_babeleo","Visibility:") }
                 PC3.CheckBox {
                     id: hideBox
-                    text: i18n("Hide this search engine")
+                    text: i18nd("plasma_applet_babeleo","Hide this search engine")
                     onCheckedChanged: if (!loading) { localChanges = true; root.configurationChanged() }
                 }
 
                 Item { Layout.fillWidth: true; implicitHeight: Kirigami.Units.largeSpacing * 2 }
 
-                PC3.Label { text: i18n("Position:") }
+                PC3.Label { text: i18nd("plasma_applet_babeleo","Position:") }
                 RowLayout {
                     PC3.RadioButton {
                         id: mainMenuRadio
-                        text: i18n("Main menu")
+                        text: i18nd("plasma_applet_babeleo","Main menu")
                         onCheckedChanged: if (!loading && checked) {
                             localChanges = true; root.configurationChanged()
                         }
@@ -384,7 +385,7 @@ Item {
                     PC3.RadioButton {
                         id: otherRadio
                         Layout.leftMargin: Kirigami.Units.largeSpacing * 2
-                        text: i18n("More search engines submenu")
+                        text: i18nd("plasma_applet_babeleo","More search engines submenu")
                         onCheckedChanged: if (!loading && checked) {
                             localChanges = true; root.configurationChanged()
                         }

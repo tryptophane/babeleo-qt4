@@ -68,7 +68,7 @@ After installation, right-click the desktop or panel → *Add Widgets* → searc
 
 To reload without restarting your session:
 ```bash
-kquitapp6 plasmashell && kstart6 plasmashell
+kquitapp6 plasmashell && kstart plasmashell
 ```
 
 ### Build dependencies
@@ -100,6 +100,38 @@ sudo dnf install cmake extra-cmake-modules plasma-devel qt6-qtbase-devel \
     kf6-kxmlgui-devel kf6-kwindowsystem-devel
 # Optional:
 sudo dnf install wl-clipboard
+```
+
+---
+
+## Uninstall
+
+### With the build directory
+
+```bash
+cd build
+sudo cmake --build . --target uninstall
+```
+
+(`KDECMakeSettings` generates this target automatically.)
+
+### Without the build directory (manual)
+
+```bash
+# C++ plugin
+sudo rm -f /usr/lib/qt6/plugins/plasma/applets/org.kde.plasma.babeleo.so
+
+# QML package
+sudo rm -rf /usr/share/plasma/plasmoids/org.kde.plasma.babeleo/
+
+# Translations
+sudo rm -f /usr/share/locale/*/LC_MESSAGES/plasma_applet_babeleo.mo
+```
+
+Afterwards, remove the applet from your panel and restart Plasma:
+
+```bash
+kquitapp6 plasmashell && kstart plasmashell
 ```
 
 ---
