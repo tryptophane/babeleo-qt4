@@ -158,12 +158,16 @@ PlasmoidItem {
                     icon.name: "dialog-cancel"
                     text: i18nd("plasma_applet_babeleo","Cancel")
                     onClicked: root.expanded = false
+                    Keys.onReturnPressed: root.expanded = false
+                    Keys.onEnterPressed: root.expanded = false
                 }
 
                 PlasmaComponents3.Button {
                     icon.name: "edit-find"
                     text: i18nd("plasma_applet_babeleo","Search")
                     onClicked: startSearch()
+                    Keys.onReturnPressed: startSearch()
+                    Keys.onEnterPressed: startSearch()
                 }
             }
         }
