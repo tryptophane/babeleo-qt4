@@ -554,6 +554,10 @@ void Babeleo::populateEngines()
                   << QStringLiteral("https://en.wiktionary.org/wiki/%s")
                   << QStringLiteral("babelfishleo") << QStringLiteral("1") << QStringLiteral("0");
 
+    m_enginesList << QStringLiteral("Cambridge Dictionary")
+                  << QStringLiteral("https://dictionary.cambridge.org/dictionary/english/%s")
+                  << QStringLiteral("babelfishleo") << QStringLiteral("1") << QStringLiteral("0");
+
     m_configuration.writeEntry("engines", m_enginesList);
     Q_EMIT configNeedsSaving();
 }

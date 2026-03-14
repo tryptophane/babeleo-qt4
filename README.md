@@ -24,7 +24,7 @@ The applet ships with a set of example services to get you started. You can add,
 remove or change all of them freely — none are mandatory:
 
 - **Translation**: Google Translate, PONS (DE↔EN), Linguee, leo.org (DE↔EN/FR/ES/IT/ZH)
-- **Encyclopedias & dictionaries**: Wikipedia (DE, EN), Wiktionary (EN), Duden (DE), Merriam-Webster (EN), Real Academia Española (ES)
+- **Encyclopedias & dictionaries**: Wikipedia (DE, EN), Wiktionary (EN), Duden (DE), Merriam-Webster (EN), Cambridge Dictionary (EN), Real Academia Española (ES)
 - **Other**: PubMed (medical literature), Google Maps, and more
 
 No data is ever sent to any service without an explicit user action (clicking).
