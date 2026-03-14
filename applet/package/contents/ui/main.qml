@@ -23,6 +23,11 @@ import org.kde.kirigami as Kirigami
 PlasmoidItem {
     id: root
 
+    // Default size for the desktop widget (planar form factor).
+    // Without this, the desktop widget grows to fill the available area.
+    implicitWidth: Kirigami.Units.gridUnit * 20
+    implicitHeight: Kirigami.Units.gridUnit * 7
+
     // Prevent Plasma from automatically toggling the popup when the global
     // shortcut ("Activate widget as if clicked") fires. Without this, Plasma
     // opens the fullRepresentation popup AND our onActivated handler also runs,
@@ -38,6 +43,20 @@ PlasmoidItem {
     // which is called AFTER the activated() signal is emitted (not before).
     property bool blockExpand: false
     property int wheelDelta: 0
+
+    // ListModel (not a JS array) so that model.icon in the delegate is a proper
+    // QVariant QString — Kirigami.Icon resolves file paths reliably from ListModel roles.
+    ListModel { id: engineModel }
+
+    function updateEngineModel() {
+        var all = root.plasmoid.engineList()
+        engineModel.clear()
+        for (var i = 0; i < all.length; i++) {
+            if (!all[i].hidden) engineModel.append({name: all[i].name, icon: all[i].icon})
+        }
+    }
+
+    Component.onCompleted: updateEngineModel()
 
     onExpandedChanged: {
         if (blockExpand && expanded) {
@@ -106,12 +125,15 @@ PlasmoidItem {
         Layout.minimumWidth: Kirigami.Units.gridUnit * 20
         // Constrain popup height to exactly fit the content.
         // Without this, PlasmaExtras.Representation grows to a large default size.
-        // contentLayout.implicitHeight gives us the exact height of TextField + buttons.
-        Layout.preferredHeight: contentLayout.implicitHeight + Kirigami.Units.smallSpacing * 4
+        // Must include the header height, otherwise Plasma underestimates the popup
+        // size and positions it too low (bottom buttons hidden behind the taskbar).
+        Layout.preferredHeight: popupHeading.implicitHeight + contentLayout.implicitHeight + Kirigami.Units.smallSpacing * 4
+        Layout.minimumHeight: Layout.preferredHeight
         Layout.maximumHeight: Layout.preferredHeight
 
         // Header with icon and name of the current search engine
         header: PlasmaExtras.PlasmoidHeading {
+            id: popupHeading
             RowLayout {
                 anchors.fill: parent
                 spacing: Kirigami.Units.smallSpacing
@@ -121,10 +143,70 @@ PlasmoidItem {
                     implicitWidth: Kirigami.Units.iconSizes.small
                     implicitHeight: Kirigami.Units.iconSizes.small
                 }
+                // Desktop widget: ComboBox to switch engines
+                PlasmaComponents3.ComboBox {
+                    id: engineCombo
+                    Layout.fillWidth: true
+                    visible: Plasmoid.formFactor === 0
+                    model: engineModel
+                    textRole: "name"
+                    currentIndex: {
+                        for (var i = 0; i < engineModel.count; i++) {
+                            if (engineModel.get(i).name === root.plasmoid.currentEngine) return i
+                        }
+                        return -1
+                    }
+                    delegate: PlasmaComponents3.ItemDelegate {
+                        width: engineCombo.popup.width
+                        highlighted: engineCombo.currentIndex === index
+                        contentItem: RowLayout {
+                            spacing: Kirigami.Units.smallSpacing
+                            // Use model.name (a reactive ListModel role) to look up the icon.
+                            // model.icon stalls on delegate reuse; model.name updates correctly.
+                            // Kirigami.Icon handles both theme names and absolute file paths,
+                            // matching the behaviour of configSearchEngines.qml.
+                            property string engIcon: {
+                                var nm = model.name || ""
+                                for (var i = 0; i < engineModel.count; i++) {
+                                    var e = engineModel.get(i)
+                                    if (e.name === nm) return e.icon || ""
+                                }
+                                return ""
+                            }
+                            Kirigami.Icon {
+                                source: parent.engIcon
+                                Layout.preferredWidth: Kirigami.Units.iconSizes.small
+                                Layout.preferredHeight: Kirigami.Units.iconSizes.small
+
+                            }
+                            PlasmaComponents3.Label {
+                                text: model.name || ""
+                                Layout.fillWidth: true
+                            }
+                        }
+                    }
+                    onActivated: function(idx) {
+                        if (idx >= 0 && idx < engineModel.count) {
+                            root.plasmoid.setEngine(engineModel.get(idx).name)
+                        }
+                    }
+                }
+                // Panel popup: static label (engine switching via context menu)
                 PlasmaComponents3.Label {
+                    visible: Plasmoid.formFactor !== 0
                     text: root.plasmoid.currentEngine
                     Layout.fillWidth: true
                     font.bold: true
+                }
+
+                PlasmaComponents3.ToolButton {
+                    icon.name: "configure"
+                    display: AbstractButton.IconOnly
+                    visible: Plasmoid.formFactor === 0
+                    PlasmaComponents3.ToolTip.text: i18nd("plasma_applet_babeleo", "Configure Babeleo…")
+                    PlasmaComponents3.ToolTip.visible: hovered
+                    PlasmaComponents3.ToolTip.delay: Kirigami.Units.toolTipDelay
+                    onClicked: Plasmoid.internalAction("configure").trigger()
                 }
             }
         }
@@ -155,6 +237,8 @@ PlasmoidItem {
                 Item { Layout.fillWidth: true }
 
                 PlasmaComponents3.Button {
+                    // Cancel only makes sense in panel popup (not desktop widget)
+                    visible: Plasmoid.formFactor !== 0
                     icon.name: "dialog-cancel"
                     text: i18nd("plasma_applet_babeleo","Cancel")
                     onClicked: root.expanded = false
@@ -223,7 +307,14 @@ PlasmoidItem {
     Connections {
         target: root.plasmoid
         function onRequestTogglePopup() {
-            root.expanded = !root.expanded
+            // Qt.callLater defers the toggle until after the context menu has fully
+            // closed. Without this, Plasma resets expanded=false right after the
+            // context menu closes, overriding our expanded=true.
+            var target = !root.expanded
+            Qt.callLater(function() { root.expanded = target })
+        }
+        function onEnginesChanged() {
+            root.updateEngineModel()
         }
     }
 }

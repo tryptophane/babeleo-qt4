@@ -118,6 +118,9 @@ public:
      */
     Q_INVOKABLE void cycleEngine(int direction);
 
+    /** Sets the current engine by name. Called from QML engine selector. */
+    Q_INVOKABLE void setEngine(const QString &name);
+
 Q_SIGNALS:
     void currentEngineChanged();
 

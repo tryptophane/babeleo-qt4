@@ -89,6 +89,10 @@ void Babeleo::init()
         this,
         SLOT(onDbusShortcutPressed(QString, QString, qlonglong))
     );
+
+    // Notify QML that the engine list is ready. This handles the race condition
+    // where QML finishes loading before C++ init() completes (e.g. fresh widget add).
+    Q_EMIT enginesChanged();
 }
 
 void Babeleo::configChanged()
@@ -213,23 +217,29 @@ void Babeleo::onDbusShortcutPressed(const QString &component, const QString &sho
     }
 }
 
+void Babeleo::setEngine(const QString &name)
+{
+    if (!m_enginesHash.contains(name)) {
+        return;
+    }
+    m_currentEngine = name;
+    setIcon(m_enginesHash.value(m_currentEngine)->getIcon());
+    const auto actions = m_langChoices->actions();
+    for (QAction *a : actions) {
+        a->setChecked(a->data().toString() == m_currentEngine);
+    }
+    m_configuration.writeEntry("currentEngine", m_currentEngine);
+    Q_EMIT configNeedsSaving();
+    Q_EMIT currentEngineChanged();
+}
+
 void Babeleo::setEngineFromAction()
 {
     QAction *senderAction = qobject_cast<QAction *>(sender());
     if (!senderAction) {
         return;
     }
-
-    m_currentEngine = senderAction->data().toString();
-    senderAction->setChecked(true);
-
-    if (m_enginesHash.contains(m_currentEngine)) {
-        setIcon(m_enginesHash.value(m_currentEngine)->getIcon());
-    }
-
-    m_configuration.writeEntry("currentEngine", m_currentEngine);
-    Q_EMIT configNeedsSaving();
-    Q_EMIT currentEngineChanged();
+    setEngine(senderAction->data().toString());
 }
 
 void Babeleo::openUrl(const QString &engineName, const QString &query)
