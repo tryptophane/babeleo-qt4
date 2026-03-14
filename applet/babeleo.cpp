@@ -488,6 +488,10 @@ void Babeleo::populateEngines()
                   << QStringLiteral("https://www.duden.de/suchen/dudenonline/%s")
                   << QStringLiteral("babelfishleo") << QStringLiteral("1") << QStringLiteral("0");
 
+    m_enginesList << QStringLiteral("Google Maps")
+                  << QStringLiteral("https://www.google.com/maps/search/?q=%s")
+                  << QStringLiteral("babelfishleo") << QStringLiteral("1") << QStringLiteral("0");
+
     m_enginesList << QStringLiteral("PubMed")
                   << QStringLiteral("https://pubmed.ncbi.nlm.nih.gov/?term=%s")
                   << QStringLiteral("babelfishleo") << QStringLiteral("1") << QStringLiteral("1");
