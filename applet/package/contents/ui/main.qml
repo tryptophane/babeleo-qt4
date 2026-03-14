@@ -37,6 +37,7 @@ PlasmoidItem {
     // Set to true during onActivated handling to block Plasma's setExpanded(true),
     // which is called AFTER the activated() signal is emitted (not before).
     property bool blockExpand: false
+    property int wheelDelta: 0
 
     onExpandedChanged: {
         if (blockExpand && expanded) {
@@ -77,12 +78,21 @@ PlasmoidItem {
                 //            Babeleo instance with all Q_INVOKABLE methods.
                 root.plasmoid.browseWithClipboard()
             }
-        }
 
-        // Tooltip shows the current search engine.
-        // PlasmaComponents3.ToolTip is displayed when hovering over the icon.
-        PlasmaComponents3.ToolTip {
-            text: i18nd("plasma_applet_babeleo","Translate clipboard content\nCurrent engine: %1", root.plasmoid.currentEngine)
+            // Scroll up → previous engine, scroll down → next engine.
+            // Accumulate delta so touchpad two-finger scroll behaves like
+            // a single step per intentional scroll gesture (threshold: 120).
+            onWheel: function(wheel) {
+                root.wheelDelta += wheel.angleDelta.y
+                while (root.wheelDelta >= 120) {
+                    root.wheelDelta -= 120
+                    root.plasmoid.cycleEngine(-1)
+                }
+                while (root.wheelDelta <= -120) {
+                    root.wheelDelta += 120
+                    root.plasmoid.cycleEngine(1)
+                }
+            }
         }
     }
 

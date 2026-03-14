@@ -421,6 +421,38 @@ void Babeleo::deleteEngine(const QString &name)
     Q_EMIT enginesChanged();
 }
 
+void Babeleo::cycleEngine(int direction)
+{
+    QStringList visibleNames;
+    for (auto it = m_enginesHash.constBegin(); it != m_enginesHash.constEnd(); ++it) {
+        if (!it.value()->isHidden()) {
+            visibleNames.append(it.key());
+        }
+    }
+    if (visibleNames.size() < 2) {
+        return;
+    }
+    std::sort(visibleNames.begin(), visibleNames.end());
+
+    int idx = visibleNames.indexOf(m_currentEngine);
+    if (idx < 0) {
+        idx = 0;
+    }
+    idx = (idx + direction + visibleNames.size()) % visibleNames.size();
+
+    m_currentEngine = visibleNames.at(idx);
+    if (m_enginesHash.contains(m_currentEngine)) {
+        setIcon(m_enginesHash.value(m_currentEngine)->getIcon());
+    }
+    const auto actions = m_langChoices->actions();
+    for (QAction *a : actions) {
+        a->setChecked(a->data().toString() == m_currentEngine);
+    }
+    m_configuration.writeEntry("currentEngine", m_currentEngine);
+    Q_EMIT configNeedsSaving();
+    Q_EMIT currentEngineChanged();
+}
+
 void Babeleo::saveEnginesToConfig()
 {
     m_enginesList.clear();

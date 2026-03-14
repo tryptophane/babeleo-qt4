@@ -112,6 +112,12 @@ public:
     /** Saves all engines to config and rebuilds the context menu. Called from QML config pages. */
     Q_INVOKABLE void rebuildAfterConfigChange();
 
+    /**
+     * Cycles to the next (+1) or previous (-1) visible search engine.
+     * Called from the mouse wheel handler in QML.
+     */
+    Q_INVOKABLE void cycleEngine(int direction);
+
 Q_SIGNALS:
     void currentEngineChanged();
 
